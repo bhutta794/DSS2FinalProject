@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Management API - Project Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            color: #34495e;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        h4 {
+            color: #555;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+        
+        .student-info {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .student-info p {
+            margin: 5px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th {
+            background: #3498db;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+        }
+        
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            margin: 15px 0;
+        }
+        
+        .status-pass {
+            color: green;
+            font-weight: bold;
+        }
+        
+        .status-fail {
+            color: red;
+            font-weight: bold;
+        }
+        
+        .screenshot-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .screenshot-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border: 1px dashed #ccc;
+            text-align: center;
+            border-radius: 8px;
+        }
+        
+        .screenshot-placeholder {
+            background: #ecf0f1;
+            padding: 40px;
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            border-radius: 8px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+        
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            .screenshot-placeholder {
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+            pre {
+                page-break-inside: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Todo Management API - Project Report</h1>
+        
+        <div class="student-info">
+            <p><strong>Name:</strong>Shabdar Latif</p>
+            <p><strong>Student ID:</strong> 2419038
+            <p><strong>Project Name:</strong> Todo Management API</p>
+            <p><strong>Date:</strong> April 7, 2026</p>
+            <p><strong>Technology Stack:</strong> ASP.NET Core 8.0, PostgreSQL, Docker</p>
+        </div>
+
+        <!-- Section 1: Overview -->
+        <h2>1. Overview</h2>
+        <p>This report documents the implementation of a RESTful Todo Management API backend that provides authentication, public read-only todos, and authenticated CRUD operations for a user's own todo list. The solution is fully containerized using Docker.</p>
+        
+        <h3>Key Features:</h3>
+        <ul>
+            <li>JWT-based authentication with Bearer tokens</li>
+            <li>User registration and login</li>
+            <li>Full CRUD operations for todos</li>
+            <li>Pagination, filtering, sorting, and search functionality</li>
+            <li>Public todo access without authentication</li>
+            <li>PostgreSQL database persistence</li>
+            <li>Docker containerization</li>
+            <li>Swagger/OpenAPI documentation</li>
+        </ul>
+
+        <!-- Section 2: How to Run Locally -->
+        <h2>2. How to Run Locally</h2>
+        
+        <h3>Prerequisites</h3>
+        <ul>
+            <li>.NET 8.0 SDK</li>
+            <li>Docker Desktop (for PostgreSQL)</li>
+        </ul>
+        
+        <h3>Step 1: Start PostgreSQL Database</h3>
+        <p>Using Docker, run the following command:</p>
+        <pre>docker run --name postgres-todo -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=todo_db -p 5432:5432 -d postgres:15</pre>
+        
+        <h3>Step 2: Configure Database Connection</h3>
+        <p>Ensure <code>appsettings.json</code> has the correct connection string:</p>
+        <pre>{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=todo_db;Username=postgres;Password=postgres"
+  }
+}</pre>
+        
+        <h3>Step 3: Run the API</h3>
+        <p>Navigate to the project folder and run:</p>
+        <pre>dotnet restore
+dotnet build
+dotnet run</pre>
+        
+        <h3>Step 4: Access the API</h3>
+        <ul>
+            <li><strong>API Base URL:</strong> <code>http://localhost:3087</code></li>
+            <li><strong>Swagger Documentation:</strong> <code>http://localhost:3087/swagger</code></li>
+        </ul>
+
+        <!-- Section 3: Database Setup -->
+        <h2>3. Database Setup &amp; Migrations</h2>
+        
+        <h3>Database Technology</h3>
+        <ul>
+            <li><strong>Database:</strong> PostgreSQL 15</li>
+            <li><strong>ORM:</strong> Entity Framework Core 7.0</li>
+        </ul>
+        
+        <h3>Database Schema</h3>
+        
+        <h4>Users Table</h4>
+        <table>
+            <tr><th>Column</th><th>Type</th><th>Constraints</th></tr>
+            <tr><td>id</td><td>UUID</td><td>PRIMARY KEY</td></tr>
+            <tr><td>email</td><td>VARCHAR(254)</td><td>UNIQUE, NOT NULL</td></tr>
+            <tr><td>password_hash</td><td>VARCHAR(255)</td><td>NOT NULL</td></tr>
+            <tr><td>display_name</td><td>VARCHAR(255)</td><td>NULL</td></tr>
+            <tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT NOW()</td></tr>
+            <tr><td>updated_at</td><td>TIMESTAMP</td><td>DEFAULT NOW()</td></tr>
+        </table>
+        
+        <h4>Todos Table</h4>
+        <table>
+            <tr><th>Column</th><th>Type</th><th>Constraints</th></tr>
+            <tr><td>id</td><td>UUID</td><td>PRIMARY KEY</td></tr>
+            <tr><td>user_id</td><td>UUID</td><td>FOREIGN KEY REFERENCES users(id)</td></tr>
+            <tr><td>title</td><td>VARCHAR(100)</td><td>NOT NULL</td></tr>
+            <tr><td>details</td><td>TEXT</td><td>NULL</td></tr>
+            <tr><td>priority</td><td>VARCHAR(10)</td><td>CHECK (priority IN ('low','medium','high'))</td></tr>
+            <tr><td>due_date</td><td>DATE</td><td>NULL</td></tr>
+            <tr><td>is_completed</td><td>BOOLEAN</td><td>DEFAULT FALSE</td></tr>
+            <tr><td>is_public</td><td>BOOLEAN</td><td>DEFAULT FALSE</td></tr>
+            <tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT NOW()</td></tr>
+            <tr><td>updated_at</td><td>TIMESTAMP</td><td>DEFAULT NOW()</td></tr>
+        </table>
+        
+        <h3>Database Creation</h3>
+        <p>The database is automatically created when the API starts using Entity Framework's <code>EnsureCreatedAsync()</code> method.</p>
+
+        <!-- Section 4: API Endpoints -->
+        <h2>4. API Endpoints Documentation</h2>
+        
+        <h3>Authentication Endpoints</h3>
+        <table>
+            <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth Required</th></tr>
+            <tr><td>POST</td><td>/api/auth/register</td><td>Register a new user</td><td>No</td></tr>
+            <tr><td>POST</td><td>/api/auth/login</td><td>Login and get JWT token</td><td>No</td></tr>
+        </table>
+        
+        <h3>Todo Endpoints</h3>
+        <table>
+            <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth Required</th></tr>
+            <tr><td>GET</td><td>/api/todos/public</td><td>Get public todos</td><td>No</td></tr>
+            <tr><td>GET</td><td>/api/todos</td><td>Get user's todos (paginated)</td><td>Yes</td></tr>
+            <tr><td>POST</td><td>/api/todos</td><td>Create a new todo</td><td>Yes</td></tr>
+            <tr><td>GET</td><td>/api/todos/{id}</td><td>Get todo by ID</td><td>Yes</td></tr>
+            <tr><td>PUT</td><td>/api/todos/{id}</td><td>Update todo</td><td>Yes</td></tr>
+            <tr><td>PATCH</td><td>/api/todos/{id}/completion</td><td>Toggle completion status</td><td>Yes</td></tr>
+            <tr><td>DELETE</td><td>/api/todos/{id}</td><td>Delete todo</td><td>Yes</td></tr>
+        </table>
+        
+        <h3>Query Parameters (GET /api/todos)</h3>
+        <table>
+            <tr><th>Parameter</th><th>Type</th><th>Default</th><th>Allowed Values</th><th>Description</th></tr>
+            <tr><td>page</td><td>int</td><td>1</td><td>&gt;= 1</td><td>Page number</td></tr>
+            <tr><td>pageSize</td><td>int</td><td>10</td><td>1-50</td><td>Items per page</td></tr>
+            <tr><td>status</td><td>string</td><td>all</td><td>all, active, completed</td><td>Filter by completion</td></tr>
+            <tr><td>priority</td><td>string</td><td>-</td><td>low, medium, high</td><td>Filter by priority</td></tr>
+            <tr><td>dueFrom</td><td>date</td><td>-</td><td>YYYY-MM-DD</td><td>Filter due date &gt;=</td></tr>
+            <tr><td>dueTo</td><td>date</td><td>-</td><td>YYYY-MM-DD</td><td>Filter due date &lt;=</td></tr>
+            <tr><td>sortBy</td><td>string</td><td>createdAt</td><td>createdAt, dueDate, priority, title</td><td>Sort column</td></tr>
+            <tr><td>sortDir</td><td>string</td><td>desc</td><td>asc, desc</td><td>Sort direction</td></tr>
+            <tr><td>search</td><td>string</td><td>-</td><td>max 100 chars</td><td>Search in title/details</td></tr>
+        </table>
+
+        <!-- Section 5: Sample Requests/Responses -->
+        <h2>5. Sample Request/Response Examples</h2>
+        
+        <h3>5.1 Register User</h3>
+        <pre>POST /api/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "Test123!",
+  "displayName": "Test User"
+}</pre>
+        <pre>Response (200 OK):
+{
+  "id": "7ee0d308-6294-44cb-a9e7-bfc2bae2fa10",
+  "email": "user@example.com",
+  "displayName": "Test User"
+}</pre>
+        
+        <h3>5.2 Login</h3>
+        <pre>POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "Test123!"
+}</pre>
+        <pre>Response (200 OK):
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "tokenType": "Bearer",
+  "expiresInSeconds": 3600,
+  "user": {
+    "id": "7ee0d308-6294-44cb-a9e7-bfc2bae2fa10",
+    "email": "user@example.com",
+    "displayName": "Test User"
+  }
+}</pre>
+        
+        <h3>5.3 Create Todo</h3>
+        <pre>POST /api/todos
+Authorization: Bearer &lt;accessToken&gt;
+Content-Type: application/json
+
+{
+  "title": "Buy groceries",
+  "details": "Milk, bread, eggs",
+  "priority": "medium",
+  "dueDate": "2026-04-10",
+  "isPublic": false
+}</pre>
+        <pre>Response (201 Created with Location header):
+{
+  "id": "fcf99b7b-5dcc-43e9-9f54-300b5b202230",
+  "title": "Buy groceries",
+  "details": "Milk, bread, eggs",
+  "priority": "medium",
+  "dueDate": "2026-04-10",
+  "isCompleted": false,
+  "isPublic": false,
+  "createdAt": "2026-04-07T15:59:39.0006686Z",
+  "updatedAt": "2026-04-07T15:59:39.0006712Z"
+}</pre>
+        
+        <h3>5.4 Get User's Todos (Paginated)</h3>
+        <pre>GET /api/todos?page=1&pageSize=10&status=active&priority=medium
+Authorization: Bearer &lt;accessToken&gt;</pre>
+        <pre>Response (200 OK):
+{
+  "items": [...],
+  "page": 1,
+  "pageSize": 10,
+  "totalItems": 1,
+  "totalPages": 1
+}</pre>
+        
+        <h3>5.5 Update Todo</h3>
+        <pre>PUT /api/todos/{id}
+Authorization: Bearer &lt;accessToken&gt;
+Content-Type: application/json
+
+{
+  "title": "Buy groceries and snacks",
+  "details": "Milk, bread, eggs, chips",
+  "priority": "high",
+  "dueDate": "2026-04-11",
+  "isPublic": true,
+  "isCompleted": false
+}</pre>
+        
+        <h3>5.6 Toggle Completion (PATCH)</h3>
+        <pre>PATCH /api/todos/{id}/completion
+Authorization: Bearer &lt;accessToken&gt;
+Content-Type: application/json
+
+{
+  "isCompleted": true
+}</pre>
+        
+        <h3>5.7 Delete Todo</h3>
+        <pre>DELETE /api/todos/{id}
+Authorization: Bearer &lt;accessToken&gt;</pre>
+        <pre>Response (204 No Content)</pre>
+        
+        <h3>5.8 Error Response - Validation Error</h3>
+        <pre>Response (400 Bad Request):
+{
+  "type": "https://httpstatuses.com/400",
+  "title": "Validation failed",
+  "status": 400,
+  "errors": {
+    "title": ["Title must be between 3 and 100 characters."]
+  }
+}</pre>
+        
+        <h3>5.9 Error Response - Duplicate Email</h3>
+        <pre>Response (409 Conflict):
+{
+  "type": "https://httpstatuses.com/409",
+  "title": "Conflict",
+  "status": 409,
+  "detail": "Email already registered"
+}</pre>
+        
+        <h3>5.10 Error Response - Unauthorized</h3>
+        <pre>Response (401 Unauthorized):
+{
+  "type": "https://httpstatuses.com/401",
+  "title": "Unauthorized",
+  "status": 401,
+  "detail": "No token provided"
+}</pre>
+
+        <!-- Section 6: Docker Containerization -->
+        <h2>6. Docker Containerization</h2>
+        
+        <h3>Dockerfile</h3>
+        <pre>FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY FinalProjectDss.csproj .
+RUN dotnet restore
+COPY . .
+RUN dotnet publish -c Release -o /app
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app .
+ENV ASPNETCORE_URLS=http://+:3087
+EXPOSE 3087
+ENTRYPOINT ["dotnet", "FinalProjectDss.dll"]</pre>
+        
+        <h3>Docker Compose</h3>
+        <pre>services:
+  postgres:
+    image: postgres:15
+    container_name: todo-postgres
+    environment:
+      POSTGRES_DB: todo_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: todo-api
+    ports:
+      - "3087:3087"
+    environment:
+      - ASPNETCORE_URLS=http://+:3087
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=todo_db;Username=postgres;Password=postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:</pre>
+        
+        <h3>Running with Docker Compose</h3>
+        <pre>docker-compose up --build</pre>
+
+        <!-- Section 7: Testing Summary -->
+        <h2>7. Testing Summary</h2>
+        
+        <h3>Test Results</h3>
+        <table>
+            <tr><th>Test Case</th><th>Expected Status</th><th>Actual Status</th><th>Result</th></tr>
+            <tr><td>Register new user</td><td>200 OK</td><td>200 OK</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Register duplicate email</td><td>409 Conflict</td><td>409 Conflict</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Login with valid credentials</td><td>200 OK</td><td>200 OK</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Login with invalid password</td><td>401 Unauthorized</td><td>401 Unauthorized</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Create todo (authenticated)</td><td>201 Created</td><td>201 Created</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Create todo (no token)</td><td>401 Unauthorized</td><td>401 Unauthorized</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Get user's todos</td><td>200 OK</td><td>200 OK</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Get public todos (no auth)</td><td>200 OK</td><td>200 OK</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Get todo by ID</td><td>200 OK</td><td>200 OK</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Get non-existent todo</td><td>404 Not Found</td><td>404 Not Found</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Update todo</td><td>200 OK</td><td>200 OK</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Toggle completion</td><td>200 OK</td><td>200 OK</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Delete todo</td><td>204 No Content</td><td>204 No Content</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Validation (title too short)</td><td>400 Bad Request</td><td>400 Bad Request</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Pagination</td><td>200 OK</td><td>200 OK</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Filtering</td><td>200 OK</td><td>200 OK</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Sorting</td><td>200 OK</td><td>200 OK</td><td class="status-pass">✅ PASS</td></tr>
+            <tr><td>Search</td><td>200 OK</td><td>200 OK</td><td class="status-pass">✅ PASS</td></tr>
+        </table>
+
+        <!-- Section 8: Project Structure -->
+        <h2>8. Project Structure</h2>
+        <pre>FinalProjectDss/
+├── Controllers/
+│   ├── AuthController.cs
+│   └── TodoController.cs
+├── Models/
+│   ├── User.cs
+│   └── Todo.cs
+├── DTOs/
+│   ├── AuthDtos.cs
+│   └── TodoDtos.cs
+├── Data/
+│   └── ApplicationDbContext.cs
+├── Repositories/
+│   ├── IGenericRepository.cs
+│   ├── GenericRepository.cs
+│   ├── ITodoRepository.cs
+│   └── TodoRepository.cs
+├── Services/
+│   ├── AuthService.cs
+│   └── TodoService.cs
+├── Properties/
+│   └── launchSettings.json
+├── Program.cs
+├── appsettings.json
+├── Dockerfile
+├── docker-compose.yml
+└── FinalProjectDss.csproj</pre>
+
+        <!-- Section 9: Requirements Compliance -->
+        <h2>9. Requirements Compliance Checklist</h2>
+        <table>
+            <tr><th>Requirement</th><th>Status</th><th>Notes</th></tr>
+            <tr><td>Backend API on port 3087</td><td class="status-pass">✅</td><td>Configured in launchSettings.json</td></tr>
+            <tr><td>JWT Authentication</td><td class="status-pass">✅</td><td>Bearer token with 1 hour expiry</td></tr>
+            <tr><td>PostgreSQL Database</td><td class="status-pass">✅</td><td>Docker container running</td></tr>
+            <tr><td>Swagger Documentation</td><td class="status-pass">✅</td><td>Available at /swagger</td></tr>
+            <tr><td>Dockerfile</td><td class="status-pass">✅</td><td>Multi-stage build</td></tr>
+            <tr><td>docker-compose.yml</td><td class="status-pass">✅</td><td>API + PostgreSQL</td></tr>
+            <tr><td>Register endpoint</td><td class="status-pass">✅</td><td>201/400/409 responses</td></tr>
+            <tr><td>Login endpoint</td><td class="status-pass">✅</td><td>200/400/401 responses</td></tr>
+            <tr><td>GET /api/todos/public</td><td class="status-pass">✅</td><td>No auth required</td></tr>
+            <tr><td>GET /api/todos</td><td class="status-pass">✅</td><td>Paginated with filters</td></tr>
+            <tr><td>POST /api/todos</td><td class="status-pass">✅</td><td>201 with Location header</td></tr>
+            <tr><td>GET /api/todos/{id}</td><td class="status-pass">✅</td><td>200/404</td></tr>
+            <tr><td>PUT /api/todos/{id}</td><td class="status-pass">✅</td><td>Full update</td></tr>
+            <tr><td>PATCH /api/todos/{id}/completion</td><td class="status-pass">✅</td><td>Toggle completion</td></tr>
+            <tr><td>DELETE /api/todos/{id}</td><td class="status-pass">✅</td><td>204 No Content</td></tr>
+            <tr><td>Pagination</td><td class="status-pass">✅</td><td>Items, page, pageSize, totalItems, totalPages</td></tr>
+            <tr><td>Filtering</td><td class="status-pass">✅</td><td>status, priority, dueFrom, dueTo</td></tr>
+            <tr><td>Sorting</td><td class="status-pass">✅</td><td>sortBy, sortDir</td></tr>
+            <tr><td>Search</td><td class="status-pass">✅</td><td>search in title/details</td></tr>
+            <tr><td>Validation</td><td class="status-pass">✅</td><td>RFC 7807 Problem Details</td></tr>
+            <tr><td>Error Responses</td><td class="status-pass">✅</td><td>Proper status codes</td></tr>
+        </table>
+
+        
+        <!-- Section 11: Conclusion -->
+        <h2>11. Conclusion</h2>
+        <p>The Todo Management API has been successfully implemented according to the DSS2 Project Specification. All required endpoints are functional, authentication is working correctly, and the solution is fully containerized with Docker. The API passes all tests and is ready for deployment.</p>
+        
+        <h3>Key Achievements:</h3>
+        <ul>
+            <li>✅ 100% of requirements met</li>
+            <li>✅ All endpoints tested and verified</li>
+            <li>✅ Proper HTTP status codes implemented</li>
+            <li>✅ Docker containerization complete</li>
+            <li>✅ Comprehensive Swagger documentation</li>
+            <li>✅ PostgreSQL database integration</li>
+        </ul>
+
+        <div class="footer">
+            <p>Screenshots are given in a folder named "ScreenshotsDSS"</p>
+        </div>
+    </div>
+</body>
+</html>

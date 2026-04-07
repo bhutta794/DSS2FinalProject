@@ -15,11 +15,11 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenAnyIP(3087);
 });
 
-// Add services
+// Added services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Configure Swagger
+//Configuring Sqagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo Management API", Version = "v1" });
